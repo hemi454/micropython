@@ -27,7 +27,6 @@
 #define MICROPY_INCLUDED_STM32_USB_H
 
 #include "usbd_cdc_msc_hid0.h"
-
 #define PYB_USB_FLAG_USB_MODE_CALLED    (0x0002)
 
 // Windows needs a different PID to distinguish different device configurations

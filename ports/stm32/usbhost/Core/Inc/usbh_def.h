@@ -418,6 +418,7 @@ typedef struct
   uint8_t                           Data[USBH_MAX_DATA_BUFFER];
   uint8_t                           address;
   uint8_t                           speed;
+  uint8_t                           PortEnabled;
   __IO uint8_t                      is_connected;    
   uint8_t                           current_interface;   
   USBH_DevDescTypeDef               DevDesc;
