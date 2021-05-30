@@ -26,14 +26,12 @@
 
 #include <stdarg.h>
 #include <string.h>
-
 #include "usbd_core.h"
 #include "usbd_desc.h"
 #include "usbd_cdc_msc_hid.h"
 #include "usbd_cdc_interface.h"
 #include "usbd_msc_interface.h"
 #include "usbd_hid_interface.h"
-
 #include "py/objstr.h"
 #include "py/runtime.h"
 #include "py/stream.h"
@@ -1007,28 +1005,31 @@ const mp_obj_type_t pyb_usb_hid_type = {
 
 #include "led.h"
 #include "usbh_core.h"
-#include "usbh_usr.h"
-#include "usbh_hid_core.h"
+//#include "usbh_usr.h"
+//#include "usbh_hid_core.h"
 #include "usbh_hid_keybd.h"
 #include "usbh_hid_mouse.h"
-
-__ALIGN_BEGIN USBH_HOST USB_Host __ALIGN_END ;
-
+#include "usb_host.h"
+//__ALIGN_BEGIN USBH_HOST USB_Host __ALIGN_END ;
+/* USB Host core handle declaration */
+USBH_HandleTypeDef hUsbHostFS;
+//ApplicationTypeDef Appli_state = APPLICATION_IDLE;
 static int host_is_enabled = 0;
 
 void pyb_usb_host_init(void) {
     if (!host_is_enabled) {
         // only init USBH once in the device's power-lifetime
         /* Init Host Library */
-        USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &HID_cb, &USR_Callbacks);
+        //USBH_Init(&hUsbHostFS, USB_OTG_FS_CORE_ID, &USB_Host, &HID_cb, &USR_Callbacks);
+        USBH_Init(&hUsbHostFS, USBH_UserProcess, HOST_FS);
     }
     host_is_enabled = 1;
 }
 
 void pyb_usb_host_process(void) {
-    USBH_Process(&USB_OTG_Core, &USB_Host);
+    USBH_Process(&hUsbHostFS);
 }
-
+/*
 uint8_t usb_keyboard_key = 0;
 
 // TODO this is an ugly hack to get key presses
@@ -1062,7 +1063,7 @@ void USR_KEYBRD_ProcessData(uint8_t pbuf) {
     led_state(4, 0);
     usb_keyboard_key = pbuf;
 }
-
+*/
 #endif // USE_HOST_MODE
 
 #endif // MICROPY_HW_ENABLE_USB

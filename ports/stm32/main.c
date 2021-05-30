@@ -770,7 +770,7 @@ soft_reset:
     // Now we initialise sub-systems that need configuration from boot.py,
     // or whose initialisation can be safely deferred until after running
     // boot.py.
-
+    #ifndef USE_HOST_MODE
     #ifndef SKIP_USBINIT
     #if MICROPY_HW_ENABLE_USB
     // init USB device to default setting if it was not already configured
@@ -784,6 +784,7 @@ soft_reset:
         #endif
         pyb_usb_dev_init(pyb_usb_dev_detect(), USBD_VID, pid, mode, 0, NULL, NULL);
     }
+    #endif
     #endif
     #endif
 
