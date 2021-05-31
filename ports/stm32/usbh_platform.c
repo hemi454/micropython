@@ -26,6 +26,20 @@
 
 /* USER CODE END INCLUDE */
 
+static void VBUS_GPIO_Init(void) {
+
+	GPIO_InitTypeDef GPIO_InitStruct;
+	/*Configure GPIO pin Output Level */
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET);
+
+	/*Configure GPIO pin : PG6 */
+	GPIO_InitStruct.Pin = GPIO_PIN_2;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+}
 /**
   * @brief  Drive VBUS.
   * @param  state : VBUS state
@@ -37,6 +51,7 @@ void MX_DriverVbusFS(uint8_t state)
 {
   uint8_t data = state;
   /* USER CODE BEGIN PREPARE_GPIO_DATA_VBUS_FS */
+  VBUS_GPIO_Init();
   if(state == 0)
   {
     /* Drive low Charge pump */

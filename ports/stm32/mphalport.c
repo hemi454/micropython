@@ -35,12 +35,10 @@ MP_WEAK int mp_hal_stdin_rx_chr(void) {
     for (;;) {
 #ifdef USE_HOST_MODE
         pyb_usb_host_process();
-/*
         int c = pyb_usb_host_get_keyboard();
         if (c != 0) {
             return c;
         }
-*/
 #endif
 /*
         if (MP_STATE_PORT(pyb_stdio_uart) != NULL && uart_rx_any(MP_STATE_PORT(pyb_stdio_uart))) {

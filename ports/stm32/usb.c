@@ -441,9 +441,12 @@ STATIC mp_obj_t pyb_usb_mode(size_t n_args, const mp_obj_t *pos_args, mp_map_t *
     //pyb_usb_host_init();
     // hardware configured for USB host mode
     
-    if (strcmp(mode_str, "host") == 0) {
+    if (strcmp(mode_str, "host") == 0) 
+    {
         pyb_usb_host_init();
-    } else {
+    } 
+    else 
+    {
         goto bad_mode;
     }
 #else
@@ -1024,6 +1027,10 @@ void pyb_usb_host_init(void) {
         USBH_Init(&hUsbHostFS, USBH_UserProcess, HOST_FS);
         USBH_RegisterClass(&hUsbHostFS, USBH_HID_CLASS);
         USBH_Start(&hUsbHostFS);
+        while(1)
+        {
+            USBH_Process(&hUsbHostFS);
+        }
     }
     host_is_enabled = 1;
 }
@@ -1031,7 +1038,7 @@ void pyb_usb_host_init(void) {
 void pyb_usb_host_process(void) {
     USBH_Process(&hUsbHostFS);
 }
-/*
+
 uint8_t usb_keyboard_key = 0;
 
 // TODO this is an ugly hack to get key presses
@@ -1040,7 +1047,7 @@ uint pyb_usb_host_get_keyboard(void) {
     usb_keyboard_key = 0;
     return key;
 }
-
+/*
 void USR_MOUSE_Init(void) {
     led_state(4, 1);
     USB_OTG_BSP_mDelay(100);

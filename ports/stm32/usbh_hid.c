@@ -770,9 +770,21 @@ uint16_t  fifo_write(FIFO_TypeDef * f, const void * buf, uint16_t  nbytes)
 *  @param  phost: Selected device
 * @retval None
 */
-__weak void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
+void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 {
-  
+  HID_KEYBD_Info_TypeDef *keybd_info;
+	uint8_t keycode;
+	HID_HandleTypeDef *HID_Handle =
+			(HID_HandleTypeDef *) phost->pActiveClass->pData;
+	if (HID_Handle->Init == USBH_HID_KeybdInit) 
+  {
+		keybd_info = USBH_HID_GetKeybdInfo(phost);
+		keycode = USBH_HID_GetASCIICode(keybd_info);
+  }
+  else
+  {
+    USBH_HID_GetMouseInfo(phost);
+  }
 }
 /**
 * @}
