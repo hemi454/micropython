@@ -121,7 +121,11 @@ USBH_StatusTypeDef  USBH_Init(USBH_HandleTypeDef *phost, void (*pUsrFunc)(USBH_H
   phost->os_event = osMessageCreate (osMessageQ(USBH_Queue), NULL); 
   
   /*Create USB Host Task */
+#if defined (USBH_PROCESS_STACK_SIZE)
+  osThreadDef(USBH_Thread, USBH_Process_OS, USBH_PROCESS_PRIO, 0, USBH_PROCESS_STACK_SIZE);
+#else
   osThreadDef(USBH_Thread, USBH_Process_OS, USBH_PROCESS_PRIO, 0, 8 * configMINIMAL_STACK_SIZE);
+#endif  
   phost->thread = osThreadCreate (osThread(USBH_Thread), phost);
 #endif  
   
@@ -830,7 +834,7 @@ USBH_StatusTypeDef  USBH_LL_Connect  (USBH_HandleTypeDef *phost)
   if(phost->gState == HOST_IDLE )
   {
     phost->device.is_connected = 1;
-    phost->gState = HOST_IDLE ;
+//    phost->gState = HOST_IDLE ;
     
     if(phost->pUser != NULL)
     {    

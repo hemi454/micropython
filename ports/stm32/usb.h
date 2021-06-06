@@ -54,6 +54,7 @@ typedef enum {
     USB_PHY_HS_ID = 1,
 } USB_PHY_ID;
 
+uint8_t keyboardKeyCode;
 typedef struct _pyb_usb_vcp_obj_t pyb_usb_vcp_obj_t;
 
 extern mp_uint_t pyb_usb_flags;
@@ -78,6 +79,6 @@ void usb_vcp_attach_to_repl(const pyb_usb_vcp_obj_t *self, bool attached);
 
 void pyb_usb_host_init(void);
 void pyb_usb_host_process(void);
-uint pyb_usb_host_get_keyboard(void);
+uint8_t pyb_usb_host_get_keyboard(void);
 
 #endif // MICROPY_INCLUDED_STM32_USB_H
