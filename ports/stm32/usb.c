@@ -1019,11 +1019,44 @@ USBH_HandleTypeDef hUsbHostFS;
 //ApplicationTypeDef Appli_state = APPLICATION_IDLE;
 static int host_is_enabled = 0;
 
+void INIT_TEST_LED_Usb()
+{
+    GPIO_InitTypeDef GPIO_InitStruct;
+	HAL_GPIO_WritePin(GPIOK, GPIO_PIN_3, GPIO_PIN_RESET);
+	GPIO_InitStruct.Pin = GPIO_PIN_3;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOK, &GPIO_InitStruct);
+
+}
+
+void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
+{
+    HID_KEYBD_Info_TypeDef *keybd_info;
+	uint8_t keycode;
+	HID_HandleTypeDef *HID_Handle =
+			(HID_HandleTypeDef *) phost->pActiveClass->pData;
+    HAL_GPIO_WritePin(GPIOK, GPIO_PIN_3, GPIO_PIN_RESET);
+    if (HID_Handle->Init == USBH_HID_KeybdInit) 
+    {
+            keybd_info = USBH_HID_GetKeybdInfo(phost);
+            keycode = USBH_HID_GetASCIICode(keybd_info);
+            if(keycode != 0)
+            {
+                HAL_GPIO_WritePin(GPIOK, GPIO_PIN_3, GPIO_PIN_SET);
+            }
+    }
+    else
+    {
+        USBH_HID_GetMouseInfo(phost);
+    }
+}
 void pyb_usb_host_init(void) {
     if (!host_is_enabled) {
         // only init USBH once in the device's power-lifetime
         /* Init Host Library */
-        //USBH_Init(&hUsbHostFS, USB_OTG_FS_CORE_ID, &USB_Host, &HID_cb, &USR_Callbacks);
+        INIT_TEST_LED_Usb();
         USBH_Init(&hUsbHostFS, USBH_UserProcess, HOST_FS);
         USBH_RegisterClass(&hUsbHostFS, USBH_HID_CLASS);
         USBH_Start(&hUsbHostFS);

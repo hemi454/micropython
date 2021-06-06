@@ -770,6 +770,11 @@ uint16_t  fifo_write(FIFO_TypeDef * f, const void * buf, uint16_t  nbytes)
 *  @param  phost: Selected device
 * @retval None
 */
+__weak void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
+{
+  
+}
+/*
 void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 {
   HID_KEYBD_Info_TypeDef *keybd_info;
@@ -786,6 +791,7 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
     USBH_HID_GetMouseInfo(phost);
   }
 }
+*/
 /**
 * @}
 */ 
