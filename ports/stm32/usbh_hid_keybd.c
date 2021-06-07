@@ -406,11 +406,11 @@ uint8_t USBH_HID_GetASCIICode(HID_KEYBD_Info_TypeDef *info)
   uint8_t   output;  
   if((info->lshift == 1) || (info->rshift))
   {
-  output =  HID_KEYBRD_ShiftKey[HID_KEYBRD_Codes[info->keys[0]]];
+    output =  HID_KEYBRD_ShiftKey[HID_KEYBRD_Codes[info->keys[0]]];
   }
   else
   {
-  output =  HID_KEYBRD_Key[HID_KEYBRD_Codes[info->keys[0]]];
+    output =  HID_KEYBRD_Key[HID_KEYBRD_Codes[info->keys[0]]];
   }
   return output;  
 }
