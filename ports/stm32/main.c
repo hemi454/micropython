@@ -86,7 +86,10 @@
 #if MICROPY_PY_THREAD
 STATIC pyb_thread_t pyb_thread_main;
 #endif
-
+#ifdef USE_HOST_MODE
+#define MICROPY_HW_UART_REPL PYB_UART_3
+#define MICROPY_HW_UART_REPL_BAUD 115200
+#endif
 #if defined(MICROPY_HW_UART_REPL)
 #ifndef MICROPY_HW_UART_REPL_RXBUF
 #define MICROPY_HW_UART_REPL_RXBUF (260)
