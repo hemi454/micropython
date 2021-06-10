@@ -441,9 +441,9 @@ STATIC mp_obj_t pyb_usb_mode(size_t n_args, const mp_obj_t *pos_args, mp_map_t *
     //pyb_usb_host_init();
     // hardware configured for USB host mode
     
-    if (strcmp(mode_str, "host") == 0) 
+    if (strcmp(mode_str, "HID_HOST") == 0) 
     {
-        pyb_usb_host_init();
+        pyb_usb_hid_host_init();
     } 
     else 
     {
@@ -1051,7 +1051,7 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
         USBH_HID_GetMouseInfo(phost);
     }
 }
-void pyb_usb_host_init(void) {
+void pyb_usb_hid_host_init(void) {
     if (!host_is_enabled) {
         // only init USBH once in the device's power-lifetime
         /* Init Host Library */

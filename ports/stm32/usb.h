@@ -77,7 +77,7 @@ int usb_vcp_recv_byte(uint8_t *c); // if a byte is available, return 1 and put t
 void usb_vcp_send_strn(const char* str, int len);
 void usb_vcp_attach_to_repl(const pyb_usb_vcp_obj_t *self, bool attached);
 
-void pyb_usb_host_init(void);
+void pyb_usb_hid_host_init(void);
 void pyb_usb_host_process(void);
 uint8_t pyb_usb_host_get_keyboard(void);
 
