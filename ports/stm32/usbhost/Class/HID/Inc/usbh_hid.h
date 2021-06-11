@@ -272,6 +272,9 @@ HID_HandleTypeDef;
   */ 
 extern USBH_ClassTypeDef  HID_Class;
 #define USBH_HID_CLASS    &HID_Class
+
+extern USBH_ClassTypeDef  CDC_Class;
+#define USBH_CDC_CLASS    &CDC_Class
 /**
   * @}
   */ 

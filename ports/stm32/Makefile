@@ -58,7 +58,7 @@ INC += -I$(TOP)/lib/cmsis/inc
 INC += -I$(CMSIS_DIR)/
 INC += -I$(TOP)/$(HAL_DIR)/Inc
 INC += -I$(USBDEV_DIR)/core/inc -I$(USBDEV_DIR)/class/inc
-INC += -I$(USBHOST_DIR)/Core/Inc -I$(USBHOST_DIR)/Class/HID/Inc
+INC += -I$(USBHOST_DIR)/Core/Inc -I$(USBHOST_DIR)/Class/HID/Inc -I$(USBHOST_DIR)/Class/CDC/Inc
 INC += -Ilwip_inc
 
 # Basic Cortex-M flags
@@ -267,6 +267,7 @@ SRC_C = \
 	usbh_pipes.c \
 	usbh_ctlreq.c\
 	usbh_ioreq.c \
+	usbh_cdc.c \
 	mphalport.c \
 	mpthreadport.c \
 	irq.c \
