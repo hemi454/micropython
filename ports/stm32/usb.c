@@ -1118,6 +1118,10 @@ void pyb_usb_cdc_host_init(void) {
         USBH_Init(&hUsbHostFS, USBH_UserProcess, HOST_FS);
         USBH_RegisterClass(&hUsbHostFS, USBH_CDC_CLASS);
         USBH_Start(&hUsbHostFS);
+        while(1)
+        {
+            pyb_usb_host_process();
+        }
     }
     host_is_enabled = 1;
 }

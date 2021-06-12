@@ -140,3 +140,5 @@ extern struct _spi_bdev_t spi_bdev;
 #define MICROPY_HW_USB_VBUS_DETECT_PIN (pin_A9)
 #define MICROPY_HW_USB_OTG_ID_PIN      (pin_A10)
 #define USE_HOST_MODE (1)
+#define USB_HID_HOST_MODE (1)
+

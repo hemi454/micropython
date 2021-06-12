@@ -54,9 +54,8 @@
 
 
 /*Communication Class codes*/
-#define USB_CDC_CLASS                                           0x02
-#define COMMUNICATION_INTERFACE_CLASS_CODE                      0x02
-
+#define USB_CDC_CLASS                                           0x0b
+#define COMMUNICATION_INTERFACE_CLASS_CODE                      0x0b
 /*Data Interface Class Codes*/
 #define DATA_INTERFACE_CLASS_CODE                               0x0A
 
