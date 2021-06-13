@@ -620,7 +620,7 @@ static USBH_StatusTypeDef USBH_HandleEnum (USBH_HandleTypeDef *phost)
   {
   case ENUM_IDLE:  
     /* Get Device Desc for only 1st 8 bytes : To get EP0 MaxPacketSize */
-    if ( USBH_Get_DevDesc(phost, 8) == USBH_OK)
+    if ( USBH_Get_DevDesc(phost, 9) == USBH_OK)
     {
       phost->Control.pipe_size = phost->device.DevDesc.bMaxPacketSize;
 
