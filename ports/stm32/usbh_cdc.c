@@ -313,11 +313,10 @@ static USBH_StatusTypeDef USBH_CDC_ClassRequest (USBH_HandleTypeDef *phost)
 }
 
  uint8_t rawRxData[64] = {};
- unsigned char cmd[10];
  #define BUFF_SIZE 64
 uint8_t CDC_RX_Buffer[BUFF_SIZE];
 uint8_t CDC_TX_Buffer[BUFF_SIZE];
- int pbSeq;
+int pbSeq = 0;
 /**
   * @brief  USBH_CDC_Process 
   *         The function is for managing state machine for CDC data transfers 
@@ -329,11 +328,13 @@ static USBH_StatusTypeDef USBH_CDC_Process (USBH_HandleTypeDef *phost)
   USBH_StatusTypeDef status = USBH_BUSY;
   USBH_StatusTypeDef req_status = USBH_OK;
   CDC_HandleTypeDef *CDC_Handle =  phost->pActiveClass->pData;
+  USBH_ChipCardDescTypeDef chipCardDesc = phost->device.CfgDesc.Itf_Desc[0].CCD_Desc;
+  uint8_t cmd[10] = {};
   cmd[0] = 0x62; /* IccPowerOn */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
-	cmd[5] = 0;	/* slot number */
+	cmd[5] = chipCardDesc.bCurrentSlotIndex;	/* slot number */
 	cmd[6] = pbSeq++;
-	cmd[7] = 1;
+	cmd[7] = chipCardDesc.bVoltageSupport;
 	cmd[8] = cmd[9] = 0; /* RFU */ 
   switch(CDC_Handle->state)
   {
@@ -352,6 +353,7 @@ static USBH_StatusTypeDef USBH_CDC_Process (USBH_HandleTypeDef *phost)
     case CDC_TRANSFER_DATA:
       USBH_CDC_Transmit(phost, cmd, sizeof(cmd));
       CDC_ProcessTransmission(phost);
+      USBH_Delay(200);
       USBH_CDC_Receive(phost, rawRxData, sizeof(rawRxData));
       CDC_ProcessReception(phost);
       break;   
