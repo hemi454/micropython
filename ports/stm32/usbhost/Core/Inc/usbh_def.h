@@ -261,6 +261,28 @@ typedef struct _EndpointDescriptor
 }
 USBH_EpDescTypeDef;
 
+typedef struct _ChipCardDescriptor
+{
+  uint8_t *pbSeq;
+  uint8_t bLength;
+  uint8_t bDescriptorType;
+  uint8_t bcdCCID;
+  uint8_t nMaxSlotIndex;
+  uint8_t bVoltageSupport;
+  uint8_t dwProtocols;
+  unsigned int dwDefaultClock;
+  uint8_t dwMaxiumumClock;
+  uint8_t bNumClockSupported;
+  uint8_t dwDataRate;
+  uint8_t dwMaxDataRate;
+  uint8_t bNumDataRatesSupp;
+  uint8_t dwMaxIFSD;
+  uint8_t dwSyncProtocols;
+  uint8_t dwMechanical;
+  uint8_t dwFeatures;
+}
+USBH_ChipCardDescTypeDef;
+
 typedef struct _InterfaceDescriptor
 {
   uint8_t bLength;
@@ -272,10 +294,10 @@ typedef struct _InterfaceDescriptor
   uint8_t bInterfaceSubClass;   /* Subclass Code (Assigned by USB Org) */
   uint8_t bInterfaceProtocol;   /* Protocol Code */
   uint8_t iInterface;           /* Index of String Descriptor Describing this interface */
+  USBH_ChipCardDescTypeDef Ch_Desc; /* Chip card descriptor */
   USBH_EpDescTypeDef               Ep_Desc[USBH_MAX_NUM_ENDPOINTS];   
 }
 USBH_InterfaceDescTypeDef;
-
 
 typedef struct _ConfigurationDescriptor
 {

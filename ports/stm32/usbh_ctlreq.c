@@ -24,6 +24,7 @@
   *
   ******************************************************************************
   */ 
+ #define dw2i(a, x) (unsigned int)((((((a[x+3] << 8) + a[x+2]) << 8) + a[x+1]) << 8) + a[x])
 /* Includes ------------------------------------------------------------------*/
 
 #include "usbh_ctlreq.h"
@@ -89,7 +90,7 @@ static void USBH_ParseCfgDesc (USBH_CfgDescTypeDef* cfg_desc,
 static void USBH_ParseEPDesc (USBH_EpDescTypeDef  *ep_descriptor, uint8_t *buf);
 static void USBH_ParseStringDesc (uint8_t* psrc, uint8_t* pdest, uint16_t length);
 static void USBH_ParseInterfaceDesc (USBH_InterfaceDescTypeDef  *if_descriptor, uint8_t *buf);
-
+static void USBH_ParseCCDDesc (USBH_ChipCardDescTypeDef  *ccd_descriptor, uint8_t *buf);
 
 /**
 * @}
@@ -368,7 +369,8 @@ static void USBH_ParseCfgDesc (USBH_CfgDescTypeDef* cfg_desc,
                                uint16_t length)
 {  
   USBH_InterfaceDescTypeDef    *pif ;
-  USBH_EpDescTypeDef           *pep;  
+  USBH_EpDescTypeDef           *pep; 
+  USBH_ChipCardDescTypeDef     *pccd; 
   USBH_DescHeader_t             *pdesc = (USBH_DescHeader_t *)buf;
   uint16_t                      ptr;
   int8_t                        if_ix = 0;
@@ -391,6 +393,7 @@ static void USBH_ParseCfgDesc (USBH_CfgDescTypeDef* cfg_desc,
   {
     ptr = USB_LEN_CFG_DESC;
     pif = (USBH_InterfaceDescTypeDef *)0;
+    pccd = (USBH_ChipCardDescTypeDef *)0;
     
     
     while ((if_ix < USBH_MAX_NUM_INTERFACES ) && (ptr < cfg_desc->wTotalLength))
@@ -399,8 +402,9 @@ static void USBH_ParseCfgDesc (USBH_CfgDescTypeDef* cfg_desc,
       if (pdesc->bDescriptorType   == USB_DESC_TYPE_INTERFACE) 
       {
         pif = &cfg_desc->Itf_Desc[if_ix];
-        USBH_ParseInterfaceDesc (pif, (uint8_t *)pdesc);            
-        
+        USBH_ParseInterfaceDesc (pif, (uint8_t *)pdesc);
+        pccd = &cfg_desc->Itf_Desc[if_ix].Ch_Desc;            
+        USBH_ParseCCDDesc (pccd, (uint8_t *)pdesc); 
         ep_ix = 0;
         pep = (USBH_EpDescTypeDef *)0;        
         while ((ep_ix < pif->bNumEndpoints) && (ptr < cfg_desc->wTotalLength))
@@ -441,7 +445,18 @@ static void  USBH_ParseInterfaceDesc (USBH_InterfaceDescTypeDef *if_descriptor,
   if_descriptor->bInterfaceProtocol = *(uint8_t  *) (buf + 7);
   if_descriptor->iInterface         = *(uint8_t  *) (buf + 8);
 }
+static void  USBH_ParseCCDDesc (USBH_ChipCardDescTypeDef  *ccd_descriptor, 
+                               uint8_t *buf)
+{
+  ccd_descriptor->bLength         = *(uint8_t  *) (buf + 9);
+  ccd_descriptor->bDescriptorType = *(uint8_t  *) (buf + 10);
+  ccd_descriptor->bcdCCID         = *(uint8_t  *) (buf + 11);
+  ccd_descriptor->nMaxSlotIndex   = *(uint8_t  *) (buf + 12);
+  ccd_descriptor->bVoltageSupport = *(uint8_t  *) (buf + 13);
+  ccd_descriptor->dwProtocols     = *(uint8_t  *) (buf + 14);
+  ccd_descriptor->dwDefaultClock  = dw2i(buf, 19);;
 
+}
 /**
   * @brief  USBH_ParseEPDesc 
   *         This function Parses the endpoint descriptor
