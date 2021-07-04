@@ -33,7 +33,7 @@ MP_WEAK uintptr_t mp_hal_stdio_poll(uintptr_t poll_flags) {
 
 MP_WEAK int mp_hal_stdin_rx_chr(void) {
     for (;;) {
-#ifdef USE_HOST_MODE
+#if defined(USE_HOST_MODE) && defined(USB_HID_HOST_MODE)
         keyboardKeyCode = 0;
         pyb_usb_host_process();
         if (keyboardKeyCode != 0) 
