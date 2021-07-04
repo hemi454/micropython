@@ -86,7 +86,7 @@
 #if MICROPY_PY_THREAD
 STATIC pyb_thread_t pyb_thread_main;
 #endif
-#ifdef USB_HID_HOST_MODE
+#if defined(USB_HID_HOST_MODE) || defined(USB_CCID_HOST_MODE) 
 #define MICROPY_HW_UART_REPL PYB_UART_3
 #define MICROPY_HW_UART_REPL_BAUD 115200
 #endif

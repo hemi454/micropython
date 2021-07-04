@@ -445,10 +445,16 @@ STATIC mp_obj_t pyb_usb_mode(size_t n_args, const mp_obj_t *pos_args, mp_map_t *
     {
         pyb_usb_hid_host_init();
     }
+/*
     else if (strcmp(mode_str, "CDC_HOST") == 0)
     {
         pyb_usb_cdc_host_init();
-    } 
+    }
+*/
+    else if (strcmp(mode_str, "CCID_HOST") == 0)
+    {
+        return mp_const_none;
+    }  
     else 
     {
         goto bad_mode;
@@ -1016,7 +1022,7 @@ const mp_obj_type_t pyb_usb_hid_type = {
 #include "usbh_hid_keybd.h"
 #include "usbh_hid_mouse.h"
 #include "usbh_hid.h"
-#include "usbh_cdc.h"
+//#include "usbh_cdc.h"
 #include "usb_host.h"
 //__ALIGN_BEGIN USBH_HOST USB_Host __ALIGN_END ;
 /* USB Host core handle declaration */
@@ -1068,36 +1074,6 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
     }
 }
 
-void USBH_CDC_Handle (void)
-{
-    uint8_t i = 0;
-	switch (CDC_STATE)
-	{
-	case CDC_STATE_IDLE:
-	{
-		  USBH_CDC_Stop(&hUsbHostFS);
-		  int len = sprintf ((char *)CDC_TX_Buffer, "DATA = %d", i);
-		  if (USBH_CDC_Transmit (&hUsbHostFS, CDC_TX_Buffer, len) == USBH_OK)
-		  {
-			  CDC_STATE = CDC_RECEIVE;
-		  }
-		  i++;
-		  break;
-	}
-
-	case CDC_RECEIVE:
-	{
-		  USBH_CDC_Stop(&hUsbHostFS);
-		  usbResult = USBH_CDC_Receive(&hUsbHostFS, (uint8_t *) CDC_RX_Buffer, BUFF_SIZE);
-		  HAL_Delay (1000);
-		  CDC_STATE = CDC_IDLE;
-	}
-
-	default:
-		  break;
-	}
-}
-
 void pyb_usb_hid_host_init(void) {
     if (!host_is_enabled) {
         // only init USBH once in the device's power-lifetime
@@ -1109,11 +1085,10 @@ void pyb_usb_hid_host_init(void) {
     }
     host_is_enabled = 1;
 }
-
+/*
 void pyb_usb_cdc_host_init(void) {
     if (!host_is_enabled) {
         // only init USBH once in the device's power-lifetime
-        /* Init Host Library */
         INIT_TEST_LED_Usb();
         USBH_Init(&hUsbHostFS, USBH_UserProcess, HOST_FS);
         USBH_RegisterClass(&hUsbHostFS, USBH_CDC_CLASS);
@@ -1125,7 +1100,7 @@ void pyb_usb_cdc_host_init(void) {
     }
     host_is_enabled = 1;
 }
-
+*/
 void pyb_usb_host_process(void) {
     USBH_Process(&hUsbHostFS);
 }
