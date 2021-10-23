@@ -1118,6 +1118,7 @@ static void HCD_RXQLVL_IRQHandler(HCD_HandleTypeDef *hhcd)
       /*manage multiple Xfer */
       hhcd->hc[channelnum].xfer_buff += pktcnt;
       hhcd->hc[channelnum].xfer_count  += pktcnt;
+      hhcd->hc[channelnum].xfer_pktcnt = pktcnt;
 
       if((USBx_HC(channelnum)->HCTSIZ & USB_OTG_HCTSIZ_PKTCNT) > 0)
       {
